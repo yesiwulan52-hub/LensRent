@@ -64,58 +64,80 @@
     </style>
 </head>
 
-<body>
-    
-<header>
-    <img id= "logo_lensrent" src="logo_lensrent.png" width="180">
-    <h1>Sistem Penyewaan Alat Fotografi</h1>
-</header>
+<body>    
+    <header>
+        <img id= "logo_lensrent" src="logo_lensrent.png" width="180">
+        <h1>Sistem Penyewaan Alat Fotografi</h1>
+    </header>
 
-<nav>
-    <a href=""></a>
-</nav>
+    <nav>
+        <div class="logo">
+            <img src="logo_lensrent.png">
+            <b>LensRent</b>
+        </div>
 
-<body>
-    <h2>Form Penyewaan</h2>
+        <div class="menu">
+            <a href="index.html">Home</a>
+            <a href="datakamera.html">Data Kamera</a>
+            <a href="formsewa.html">Sewa</a>
+        </div>
+    </nav>
+
+    <header>
+        <h1>Form Penyewaan Kamera</h1>
+    </header>
+
+    <section>
+
     <form>
-    Id Penyewaan<br>
-    <input type="number" name="id"><br>
-    Kode Kamera<br>
-    <input type="text" name="kode"><br>
-    Nama Penyewa<br>
-    <input type="text" name="nama"><br>
-    No. Telepon<br>
-    <input type="text" name="telepon"><br><br>
-    Pilih Kamera<br>
-    <select name="kamera">
+
+    ID Penyewaan
+    <input type="number" name="id">
+
+    Nama Penyewa
+    <input type="text" name="nama">
+
+    No. Telepon
+    <input type="text" name="telepon">
+
+    Pilih Kamera
+    <select>
     <option>Fujifilm X100F</option>
     <option>Sony A7 III</option>
     <option>Canon R5</option>
     <option>Nikon D750</option>
     <option>Canon 80D</option>
-    </select><br><br>
-    Tanggal Sewa<br>
-    <input type="date" name="tanggal_sewa"><br><br>
-    Tanggal Kembali<br>
-    <input type="date" name="tanggal_kembali"><br><br>
-    Jumlah Unit<br>
-    <input type="number" name="jumlah"><br><br>
-    Metode Pembayaran<br>
-    <select name="pembayaran">
+    </select>
+
+    Tanggal Sewa
+    <input type="date">
+
+    Tanggal Kembali
+    <input type="date">
+
+    Jumlah Unit
+    <input type="number">
+
+    Metode Pembayaran
+    <select>
     <option>Transfer Bank</option>
     <option>Cash</option>
     <option>E-Wallet</option>
-    </select><br><br>
-    Catatan<br>
-    <input type="text" name="catatan"><br><br>
-    <button type="submit">Simpan Penyewaan</button>
+    </select>
+
+    Catatan
+    <input type="text">
+
+    <button type="submit">Simpan</button>
 
     </form>
-    <a href="index.html">Kembali</a>
 
-<footer>
-<p> </p>
-</footer>
+    </section>
 
+    <footer>
+        <div>© 2026 LensRent</div>
+        <div>Instagram | WhatsApp</div>
+        <div>Support</div>
+    </footer>
 </body>
 </html>
