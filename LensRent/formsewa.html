@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LensRent - Sistem Penyewaan Alat Fotografi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+    <div><b>LensRent</b></div>
+    <div class="menu">
+        <a href="index.html">Home</a>
+        <a href="datakamera.html">Data Kamera</a>
+        <a href="formsewa.html">Penyewaan</a>
+    </div>
+</nav>
+
+<header>
+    <h1>Form Penyewaan Kamera</h1>
+</header>
+
+<div class="container">
+
+<section>
+
+<h2>Isi Data Penyewaan</h2>
+
+<form>
+
+<label>Id Penyewaan</label>
+<input type="number" name="id">
+
+<label>Kode Kamera</label>
+<input type="text" name="kode">
+
+<label>Nama Penyewa</label>
+<input type="text" name="nama">
+
+<label>No. Telepon</label>
+<input type="text" name="telepon">
+
+<label>Pilih Kamera</label>
+<select name="kamera">
+<option>Fujifilm X100F</option>
+<option>Sony A7 III</option>
+<option>Canon R5</option>
+<option>Nikon D750</option>
+<option>Canon 80D</option>
+</select>
+
+<label>Tanggal Sewa</label>
+<input type="date" name="tanggal_sewa">
+
+<label>Tanggal Kembali</label>
+<input type="date" name="tanggal_kembali">
+
+<label>Jumlah Unit</label>
+<input type="number" name="jumlah">
+
+<label>Metode Pembayaran</label>
+<select name="pembayaran">
+<option>Transfer Bank</option>
+<option>Cash</option>
+<option>E-Wallet</option>
+</select>
+
+<label>Catatan</label>
+<input type="text" name="catatan">
+
+<button type="submit">Simpan Penyewaan</button>
+
+</form>
+
+</section>
+
+<aside>
+<h3>Informasi</h3>
+<p>Pastikan data yang diisi sudah benar sebelum menyimpan.</p>
+</aside>
+
+</div>
+
+<footer>
+    <div class="footer-section">
+        <h3>LensRent</h3>
+        <p>Sewa kamera mudah dan cepat.</p>
+    </div>
+    <div class="footer-section">
+        <h3>Navigasi</h3>
+        <p>Home | Data Kamera | Sewa</p>
+    </div>
+    <div class="footer-section">
+        <h3>Instagram</h3>
+        <p>@LensRent</p>
+    </div>
+</footer>
+
+</body>
+</html>
