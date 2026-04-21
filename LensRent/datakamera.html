@@ -3,126 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LensRent - Sistem Penyewaan Alat Fotografi</title>
+    <meta name="description" content="LensRent - Data Kamera">
+    <title>LensRent - Data Kamera</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
 <nav>
     <div class="nav-left">
-        <img src="logo_lensrent.png" class="logo-nav">
-        <b>LensRent</b>
+        <div class="logo-icon">
+            <img src="logo_lensrent.png" alt="">
+        </div>
+        <span class="logo-text">LensRent</span>
     </div>
-
-    <div class="menu">
+    <div class="menu" id="menu">
         <a href="index.html">Home</a>
-        <a href="datakamera.html">Data Kamera</a>
+        <a href="datakamera.html" class="active">Data Kamera</a>
         <a href="formsewa.html">Penyewaan</a>
     </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
 </nav>
 
-<header>
-    <div class="header-content">
-        <h1>Sistem Penyewaan Alat Fotografi</h1>
+<header class="hero-small">
+    <div class="hero-content">
+        <h1>Data Kamera</h1>
+        <p>Kelola daftar kamera yang tersedia untuk disewakan</p>
     </div>
 </header>
 
 <div class="container">
+    <aside class="sidebar">
+        <div class="widget">
+            <h3>📊 Statistik</h3>
+            <div class="stat-item"><span class="stat-label">Total Kamera:</span><span class="stat-value" id="statTotalKamera">0</span></div>
+            <div class="stat-item"><span class="stat-label">Tersedia:</span><span class="stat-value" id="statTersedia">0</span></div>
+            <div class="stat-item"><span class="stat-label">Disewa:</span><span class="stat-value" id="statDisewa">0</span></div>
+            <div class="stat-item warning"><span class="stat-label">⚠️ Stok Menipis:</span><span class="stat-value" id="statStokMenipis">0</span></div>
+        </div>
+        <div class="widget">
+            <h3>🏷️ Filter Kategori</h3>
+            <label class="checkbox-label"><input type="checkbox" class="filter-kategori" value="DSLR"> 📸 DSLR</label>
+            <label class="checkbox-label"><input type="checkbox" class="filter-kategori" value="Mirrorless"> 🔄 Mirrorless</label>
+        </div>
+        <div class="widget">
+            <h3>💡 Info</h3>
+            <p>Klik Edit untuk mengubah data</p>
+            <p>Klik Hapus untuk menghapus data</p>
+            <button id="btnResetData" class="btn-reset">🔄 Reset Data</button>
+        </div>
+    </aside>
 
-<aside>
-    <h3>Filter</h3>
-    <label><input type="checkbox"> DSLR</label>
-    <label><input type="checkbox"> Mirrorless</label>
+    <div class="main-content">
+        <div class="section-header">
+            <h2>📋 Manajemen Kamera</h2>
+            <button id="btnTambah" class="btn-primary">+ Tambah Kamera</button>
+        </div>
 
-    <h3>Statistik</h3>
-    <p>Total Kamera : 20</p>
-    <p>Tersedia : 15</p>
-    <p>Dipinjam : 5</p>
-</aside>
+        <div id="formWrapper" class="form-wrapper" style="display: none;">
+            <h3 id="judulForm">Tambah Kamera</h3>
+            <form id="formKamera">
+                <div class="form-row">
+                    <div class="form-group"><label>Kode *</label><input type="text" id="fKode" placeholder="K007" required></div>
+                    <div class="form-group"><label>Nama *</label><input type="text" id="fNama" placeholder="Canon EOS R6" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Kategori</label><select id="fKategori"><option>Mirrorless</option><option>DSLR</option></select></div>
+                    <div class="form-group"><label>Jumlah</label><input type="number" id="fJumlah" min="1" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Harga/Hari</label><input type="number" id="fHarga" min="1000" required></div>
+                    <div class="form-group"><label>Foto URL</label><input type="text" id="fFoto" placeholder="Opsional"></div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-save">💾 Simpan</button>
+                    <button type="button" id="btnBatal" class="btn-cancel">❌ Batal</button>
+                </div>
+            </form>
+        </div>
 
-<section>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Cari kode atau nama kamera...">
+        </div>
 
-<div class="search-box">
-    <input type="text" placeholder="Cari Kamera">
-    <button>Cari</button>
-</div>
-
-<h2>Data Kamera</h2>
-
-<table>
-<thead>
-    <tr>
-    <th>Kode</th>
-    <th>Nama</th>
-    <th>Kategori</th>
-    <th>Jumlah</th>
-    <th>Harga</th>
-    </tr>
-</thead>
-
-<tbody>
-    <tr>
-    <td>K001</td>
-    <td>Fujifilm X100F</td>
-    <td>Mirrorless</td>
-    <td>5</td>
-    <td>150000</td>
-    </tr>
-
-    <tr>
-    <td>K002</td>
-    <td>Sony A7 III</td>
-    <td>Mirrorless</td>
-    <td>3</td>
-    <td>250000</td>
-    </tr>
-
-    <tr>
-    <td>K003</td>
-    <td>Canon R5</td>
-    <td>Mirrorless</td>
-    <td>4</td>
-    <td>230000</td>
-    </tr>
-
-    <tr>
-    <td>K004</td>
-    <td>Nikon D750</td>
-    <td>DSLR</td>
-    <td>3</td>
-    <td>200000</td>
-    </tr>
-
-    <tr>
-    <td>K005</td>
-    <td>Canon 80D</td>
-    <td>DSLR</td>
-    <td>5</td>
-    <td>180000</td>
-    </tr>
-</tbody>
-</table>
-
-</section>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Kode</th><th>Nama</th><th>Kategori</th><th>Stok</th><th>Harga</th><th>Aksi</th></tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <footer>
-    <div class="footer-section">
-        <h3>LensRent</h3>
-        <p>Sewa kamera mudah dan cepat.</p>
-    </div>
-    <div class="footer-section"> 
-        <h3>Navigasi</h3> 
-            <a href="index.html">Home</a> 
-            <a href="datakamera.html">Data Kamera</a> 
-            <a href="formsewa.html">Penyewaan</a> 
-    </div>
-    <div class="footer-section">
-        <h3>Instagram</h3>
-        <p>@LensRent</p>
-    </div>
+    <div class="footer-section"><h3>📸 LensRent</h3><p>Sewa kamera mudah dan cepat.</p></div>
+    <div class="footer-section"><h3>🔗 Navigasi</h3><a href="index.html">Home</a><a href="datakamera.html">Data Kamera</a><a href="formsewa.html">Penyewaan</a></div>
+    <div class="footer-section"><h3>📞 Kontak</h3><p>📞 (021) 1234-5678</p><p>✉️ info@lensrent.com</p></div>
 </footer>
 
+<script src="script.js"></script>
 </body>
 </html>
