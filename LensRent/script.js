@@ -1,4 +1,3 @@
-// ==================== DATA AWAL ====================
 const dataKameraAwal = [
     { kode: "K001", nama: "Fujifilm X100F", kategori: "Mirrorless", jumlah: 5, harga: 150000, foto: "FujifilmX100F.jpg" },
     { kode: "K002", nama: "Sony A7 III", kategori: "Mirrorless", jumlah: 3, harga: 250000, foto: "Sony_a7_III.jpg" },
@@ -6,12 +5,10 @@ const dataKameraAwal = [
     { kode: "K004", nama: "Nikon D750", kategori: "DSLR", jumlah: 3, harga: 200000, foto: "Nikon_d750.jpg" },
 ];
 
-// Load data dari localStorage
 let daftarKamera = JSON.parse(localStorage.getItem("lensrent_kamera")) || dataKameraAwal;
 let daftarSewa = JSON.parse(localStorage.getItem("lensrent_sewa")) || [];
 let editIndex = -1;
 
-// ==================== FUNGSI BANTU ====================
 const formatRupiah = (angka) => {
     return "Rp " + new Intl.NumberFormat("id-ID").format(angka);
 };
@@ -29,7 +26,6 @@ const showNotification = (pesan, jenis = "success") => {
     setTimeout(() => notif.remove(), 3000);
 };
 
-// ==================== UPDATE STATISTIK ====================
 const updateStatistik = () => {
     const totalKamera = daftarKamera.reduce((sum, k) => sum + k.jumlah, 0);
     const totalDisewa = daftarSewa.reduce((sum, s) => sum + s.jumlah, 0);
@@ -47,7 +43,6 @@ const updateStatistik = () => {
     if (statPendapatan) statPendapatan.textContent = formatRupiah(totalPendapatan);
 };
 
-// ==================== RENDER TABEL KAMERA ====================
 const renderTabelKamera = (data = daftarKamera) => {
     const tbody = document.getElementById("tableBody");
     if (!tbody) return;
@@ -74,7 +69,6 @@ const renderTabelKamera = (data = daftarKamera) => {
     updateStatistik();
 };
 
-// ==================== RENDER GRID KAMERA ====================
 const renderGridKamera = (data = daftarKamera) => {
     const gridContainer = document.getElementById("kameraGrid");
     if (!gridContainer) return;
@@ -94,7 +88,6 @@ const renderGridKamera = (data = daftarKamera) => {
     `).join("");
 };
 
-// ==================== FILTER & PENCARIAN ====================
 const filterKamera = () => {
     const searchInput = document.getElementById("searchInput");
     const searchKamera = document.getElementById("searchKamera");
@@ -115,7 +108,6 @@ const filterKamera = () => {
     renderGridKamera(filtered);
 };
 
-// ==================== CRUD KAMERA ====================
 const initCRUDKamera = () => {
     const btnTambah = document.getElementById("btnTambah");
     const formWrapper = document.getElementById("formWrapper");
@@ -215,7 +207,6 @@ const initCRUDKamera = () => {
     }
 };
 
-// ==================== FORM SEWA ====================
 const hitungHari = (tglSewa, tglKembali) => {
     const start = new Date(tglSewa);
     const end = new Date(tglKembali);
@@ -410,7 +401,6 @@ const initFormSewa = () => {
     renderRiwayatSewa();
 };
 
-// ==================== PENCARIAN HOME ====================
 const initPencarianHome = () => {
     const searchInput = document.getElementById("searchKamera");
     const searchBtn = document.getElementById("btnCari");
@@ -428,7 +418,6 @@ const initPencarianHome = () => {
     if (searchBtn) searchBtn.addEventListener("click", filterCards);
 };
 
-// ==================== HAMBURGER MENU ====================
 const initHamburger = () => {
     const hamburger = document.getElementById("hamburger");
     const menu = document.getElementById("menu");
@@ -439,7 +428,6 @@ const initHamburger = () => {
     }
 };
 
-// ==================== RESET DATA ====================
 const initResetData = () => {
     const btnReset = document.getElementById("btnResetData");
     if (btnReset) {
@@ -460,7 +448,6 @@ const initResetData = () => {
     }
 };
 
-// ==================== INITIALIZATION ====================
 document.addEventListener("DOMContentLoaded", () => {
     const path = window.location.pathname;
     

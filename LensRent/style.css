@@ -1,4 +1,3 @@
-/* ==================== RESET & BASE ==================== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
@@ -12,7 +11,6 @@ h1 { font-size: clamp(28px, 6vw, 48px); font-weight: 800; }
 h2 { font-size: clamp(22px, 5vw, 32px); font-weight: 700; margin-bottom: 20px; color: #4A3728; }
 h3 { font-size: clamp(18px, 4vw, 22px); font-weight: 600; margin-bottom: 15px; color: #6B4C3A; }
 
-/* ==================== NAVBAR ==================== */
 nav {
     position: fixed;
     top: 0;
@@ -56,7 +54,6 @@ nav {
     cursor: pointer;
 }
 
-/* ==================== HERO SECTION ==================== */
 .hero {
     margin-top: 55px;
     min-height: 400px;
@@ -111,7 +108,6 @@ nav {
     color: white;
 }
 
-/* ==================== CONTAINER & SIDEBAR ==================== */
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -159,7 +155,6 @@ nav {
 .stat-value { font-weight: 700; color: #6B4C3A; }
 .stat-item.warning .stat-value { color: #D2691E; }
 
-/* Checkbox Styling */
 .checkbox-label {
     display: flex;
     align-items: center;
@@ -175,7 +170,6 @@ nav {
 .price-info p:last-child { border-bottom: none; }
 .price-info strong { color: #6B4C3A; }
 
-/* ==================== MAIN CONTENT ==================== */
 .main-content { flex: 1; }
 
 .deskripsi-card {
@@ -215,7 +209,6 @@ nav {
     margin-bottom: 20px;
 }
 
-/* Search Box */
 .search-box { display: flex; gap: 10px; }
 .search-box input {
     padding: 12px 18px;
@@ -253,7 +246,6 @@ nav {
 }
 .btn-primary:hover { transform: translateY(-2px); background: #A0522D; box-shadow: 0 4px 12px rgba(160, 82, 45, 0.3); }
 
-/* ==================== GRID (4-2-1 kolom) ==================== */
 .grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -284,7 +276,6 @@ nav {
 .card p { color: #D2691E; font-weight: 700; margin-bottom: 8px; font-size: 18px; }
 .card small { color: #8B6248; font-size: 12px; }
 
-/* ==================== TABLE ==================== */
 .tabel-section {
     background: white;
     border-radius: 16px;
@@ -323,7 +314,6 @@ td button {
 .kategori-badge.dslr { background: #FDF8F0; color: #D2691E; }
 .stok-menipis { color: #D2691E; font-weight: 700; }
 
-/* ==================== FORM STYLES ==================== */
 .form-card, .riwayat-card {
     background: white;
     border-radius: 16px;
@@ -422,7 +412,6 @@ legend { padding: 0 12px; font-weight: 700; color: #6B4C3A; }
 }
 .btn-hapus-sewa:hover { background: #B87333; transform: scale(1.05); }
 
-/* ==================== NOTIFIKASI ==================== */
 .notifikasi {
     position: fixed;
     bottom: 20px;
@@ -441,7 +430,6 @@ legend { padding: 0 12px; font-weight: 700; color: #6B4C3A; }
     to { transform: translateX(0); opacity: 1; }
 }
 
-/* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
     .hamburger { display: block; }
     .menu {
@@ -477,7 +465,6 @@ legend { padding: 0 12px; font-weight: 700; color: #6B4C3A; }
     .hero-content p { font-size: 14px; }
 }
 
-/* ==================== FOOTER ==================== */
 footer {
     background: #3E2723;
     color: #D2B48C;
@@ -522,7 +509,6 @@ footer {
     .footer-section a { display: inline-block; margin: 5px 10px; }
 }
 
-/* ==================== SCROLLBAR ==================== */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: #F5EFE6; border-radius: 10px; }
 ::-webkit-scrollbar-thumb { background: #6B4C3A; border-radius: 10px; }
