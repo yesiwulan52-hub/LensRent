@@ -18,11 +18,11 @@
     <aside class="sidebar">
         <div class="widget">
             <h3>📊 Statistik</h3>
-            <div class="stat-item"><span class="stat-label">Total Kamera:</span><span class="stat-value" id="statTotalKamera">0</span></div>
-            <div class="stat-item"><span class="stat-label">Tersedia:</span><span class="stat-value" id="statTersedia">0</span></div>
-            <div class="stat-item"><span class="stat-label">Disewa:</span><span class="stat-value" id="statDisewa">0</span></div>
-            <div class="stat-item warning"><span class="stat-label">⚠️ Stok Menipis (&lt;3):</span><span class="stat-value" id="statStokMenipis">0</span></div>
-            <div class="stat-item"><span class="stat-label">💰 Pendapatan:</span><span class="stat-value" id="statPendapatan">Rp 0</span></div>
+            <div class="stat-item"><span class="stat-label">Total Kamera:</span><span class="stat-value">{{ $totalKamera ?? 0 }}</span></div>
+            <div class="stat-item"><span class="stat-label">Tersedia:</span><span class="stat-value">{{ $totalTersedia ?? 0 }}</span></div>
+            <div class="stat-item"><span class="stat-label">Disewa:</span><span class="stat-value">{{ $totalDisewa ?? 0 }}</span></div>
+            <div class="stat-item warning"><span class="stat-label">⚠️ Stok Menipis (&lt;3):</span><span class="stat-value">{{ $stokMenipis ?? 0 }}</span></div>
+            <div class="stat-item"><span class="stat-label">💰 Pendapatan:</span><span class="stat-value">Rp {{ number_format($pendapatan ?? 0, 0, ',', '.') }}</span></div>
         </div>
 
         <div class="widget">
@@ -43,11 +43,9 @@
             <p>✅ Minimal sewa 1 hari</p>
             <p>✅ Asuransi tersedia</p>
             <p>✅ Free delivery area Jakarta</p>
-            <button id="btnResetData" class="btn-reset">🔄 Reset Semua Data</button>
         </div>
     </aside>
 
-    <!-- Konten Utama -->
     <div class="main-content">
         <section class="deskripsi-card">
             <h2>Tentang LensRent</h2>
@@ -69,9 +67,55 @@
                 </div>
             </div>
             <div class="grid" id="kameraGrid">
-                <div class="skeleton-card">Loading...</div>
+                @forelse ($kameras ?? [] as $k)
+                <div class="card" data-nama="{{ $k->nama }}" data-kategori="{{ $k->kategori }}">
+                    <img src="{{ $k->foto ? asset($k->foto) : 'https://placehold.co/400x300/1B3A6B/white?text=Kamera' }}" alt="{{ $k->nama }}">
+                    <h4>{{ $k->nama }}</h4>
+                    <p>Rp {{ number_format($k->harga, 0, ',', '.') }}<span style="font-size:12px">/hari</span></p>
+                    <small>{{ $k->kategori }} | Stok: {{ $k->jumlah }}</small>
+                </div>
+                @empty
+                <p>Tidak ada kamera</p>
+                @endforelse
             </div>
         </section>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    // Filter Live Search (Nama Kamera)
+    const searchInput = document.getElementById('searchKamera');
+    const cards = document.querySelectorAll('.card');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const keyword = this.value.toLowerCase();
+            cards.forEach(card => {
+                const nama = card.getAttribute('data-nama').toLowerCase();
+                card.style.display = nama.includes(keyword) ? 'block' : 'none';
+            });
+        });
+    }
+
+    // Filter Kategori (Checkbox)
+    const filterCheckboxes = document.querySelectorAll('.filter-kategori');
+    function applyCategoryFilter() {
+        const selectedCategories = Array.from(filterCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+
+        cards.forEach(card => {
+            const kategori = card.getAttribute('data-kategori');
+            if (selectedCategories.length === 0 || selectedCategories.includes(kategori)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    filterCheckboxes.forEach(cb => cb.addEventListener('change', applyCategoryFilter));
+</script>
+@endpush
