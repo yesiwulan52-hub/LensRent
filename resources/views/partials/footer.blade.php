@@ -8,7 +8,7 @@
         <h3>🔗 Navigasi</h3>
         <a href="{{ route('home') }}">Home</a>
         <a href="{{ route('kamera.index') }}">Data Kamera</a>
-        <a href="{{ route('sewa.form') }}">Penyewaan</a>
+        {{-- <a href="{{ route('sewa.form') }}">Penyewaan</a> --}}
     </div>
     <div class="footer-section">
         <h3>📞 Kontak Kami</h3>

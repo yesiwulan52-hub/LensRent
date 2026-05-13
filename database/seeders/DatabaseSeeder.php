@@ -8,9 +8,10 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
+        $this->call(UserSeeder::class);
         $this->call(KameraSeeder::class);
-        $this->call(SewaSeeder::class);
+        // SewaSeeder nanti setelah ada user_id
     }
 }

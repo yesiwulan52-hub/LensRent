@@ -123,7 +123,7 @@ nav {
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 50px 20px;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -134,6 +134,23 @@ nav {
         flex-direction: row;
         align-items: flex-start;
     }
+}
+
+.remember-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+}
+.remember-checkbox input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+}
+.remember-checkbox label {
+    margin: 0;
+    cursor: pointer;
 }
 
 .sidebar {
@@ -210,13 +227,113 @@ nav {
 }
 
 .deskripsi-card,
-.form-card,
+.form-card{
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
 .riwayat-card {
+    width: 100%;
     background: white;
-    padding: 30px;
-    border-radius: 16px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    padding: 25px;
     margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    overflow-x: auto;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+    gap: 15px;
+}
+
+.section-header h2 {
+    margin: 0;
+    color: #4A3728;
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    background: #6B4C3A;
+    color: white;
+    padding: 12px 15px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #EDE0D4;
+    vertical-align: middle;
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.table tr:hover {
+    background-color: #F5EFE6;
+}
+
+.btn-hapus-sewa {
+    background: #CD853F;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-hapus-sewa:hover {
+    background: #B87333;
+    transform: scale(1.02);
+}
+
+.empty-message {
+    text-align: center;
+    padding: 40px;
+    color: #8B6248;
+    font-style: italic;
+}
+
+.btn-primary {
+    background: #A0522D;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+}
+.btn-primary:hover {
+    background: #CD853F;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+.section-header h2 {
+    margin: 0;
+    color: #4A3728;
+}
+
+.form-sewa-card {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .highlight {
@@ -826,4 +943,20 @@ footer {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #A0522D;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: #D2B48C;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.logout-button:hover {
+    background: #6B4C3A;
+    color: white;
+    transform: translateY(-2px);
 }

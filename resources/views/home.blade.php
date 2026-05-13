@@ -88,6 +88,21 @@
     // Filter Live Search (Nama Kamera)
     const searchInput = document.getElementById('searchKamera');
     const cards = document.querySelectorAll('.card');
+    const filterCheckboxes = document.querySelectorAll('.filter-kategori');
+
+    function filterCards() {
+        const keyword = searchInput ? searchInput.value.toLowerCase() : '';
+        const selectedCategories = Array.from(filterCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+        cards.forEach(card => {
+            const nama = card.getAttribute('data-nama').toLowerCase();
+            const kategori = card.getAttribute('data-kategori');
+            const matchName = nama.includes(keyword);
+            const matchCat = (selectedCategories.length === 0 || selectedCategories.includes(kategori));
+            card.style.display = (matchName && matchCat) ? 'block' : 'none';
+        });
+    }
 
     if (searchInput) {
         searchInput.addEventListener('input', function() {
@@ -96,23 +111,6 @@
                 const nama = card.getAttribute('data-nama').toLowerCase();
                 card.style.display = nama.includes(keyword) ? 'block' : 'none';
             });
-        });
-    }
-
-    // Filter Kategori (Checkbox)
-    const filterCheckboxes = document.querySelectorAll('.filter-kategori');
-    function applyCategoryFilter() {
-        const selectedCategories = Array.from(filterCheckboxes)
-            .filter(cb => cb.checked)
-            .map(cb => cb.value);
-
-        cards.forEach(card => {
-            const kategori = card.getAttribute('data-kategori');
-            if (selectedCategories.length === 0 || selectedCategories.includes(kategori)) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
         });
     }
 
