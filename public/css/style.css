@@ -129,6 +129,20 @@ nav {
     gap: 30px;
 }
 
+.spinner {
+    border: 3px solid #EDE0D4;
+    border-top: 3px solid #A0522D;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 @media (min-width: 992px) {
     .container {
         flex-direction: row;

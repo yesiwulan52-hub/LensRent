@@ -24,7 +24,9 @@
         @else
             <a href="{{ route('login') }}">Login</a>
             <a href="{{ route('register') }}">Register</a>
+            <a href="{{ route('preferences') }}">Preferensi</a>
         @endauth
     </div>
     <button class="hamburger" id="hamburger">☰</button>
+
 </nav>

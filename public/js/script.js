@@ -461,8 +461,104 @@ document.addEventListener("DOMContentLoaded", () => {
         updateStatistik();
     } else {
         renderGridKamera();
-        renderTabelKamera();  
+        renderTabelKamera();
         initPencarianHome();
         updateStatistik();
+    }
+});
+
+async function fetchWeather() {
+    const loadingDiv = document.getElementById('weather-loading');
+    const contentDiv = document.getElementById('weather-content');
+    const errorDiv = document.getElementById('weather-error');
+    if (!loadingDiv) return;
+
+    loadingDiv.style.display = 'block';
+    contentDiv.style.display = 'none';
+    errorDiv.style.display = 'none';
+
+    try {
+        const response = await fetch('https://wttr.in/Surabaya?format=j1');
+        if (!response.ok) throw new Error();
+        const data = await response.json();
+        const current = data.current_condition[0];
+        document.getElementById('city-name').innerText = 'Surabaya';
+        document.getElementById('temperature').innerHTML = `${current.temp_C}°C`;
+        document.getElementById('description').innerText = current.weatherDesc[0].value;
+        contentDiv.style.display = 'block';
+    } catch (error) {
+        errorDiv.innerText = 'Gagal memuat data cuaca.';
+        errorDiv.style.display = 'block';
+    } finally {
+        loadingDiv.style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', fetchWeather);
+
+// Cookie helpers
+function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+function deleteCookie(name) {
+    document.cookie = name + "=; Max-Age=-99999999; path=/";
+}
+
+// Dark mode toggle
+function applyDarkMode(isDark) {
+    if (isDark) {
+        document.documentElement.classList.add('dark');
+        setCookie('theme', 'dark', 30);
+    } else {
+        document.documentElement.classList.remove('dark');
+        setCookie('theme', 'light', 30);
+    }
+}
+// Inisialisasi tema (prioritas cookie > system)
+const savedTheme = getCookie('theme');
+if (savedTheme === 'dark') {
+    applyDarkMode(true);
+} else if (savedTheme === 'light') {
+    applyDarkMode(false);
+} else {
+    // Cek preferensi sistem
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyDarkMode(prefersDark);
+}
+// Event listener tombol toggle (nanti ditaruh di navbar)
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.getElementById('dark-mode-toggle');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            applyDarkMode(!isDark);
+        });
+    }
+});
+
+document.getElementById('reset-visit-btn')?.addEventListener('click', async function() {
+    if (confirm('Reset semua data kunjungan?')) {
+        const token = document.querySelector('meta[name="csrf-token"]').content;
+        const response = await fetch('{{ route("reset.visit") }}', {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': token }
+        });
+        if (response.ok) location.reload();
     }
 });

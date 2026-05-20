@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KameraController;
 use App\Http\Controllers\SewaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PreferencesController;
 use Illuminate\Support\Facades\Route;
 
 // Halaman utama (bisa diakses publik)
@@ -18,6 +19,8 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/kamera', [KameraController::class, 'index'])->name('kamera.index');
 });
+
+Route::get('/kamera/search', [KameraController::class, 'search'])->name('kamera.search');
 
 // CRUD kamera hanya untuk admin
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -43,4 +46,19 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/sewa/{sewa}', [SewaController::class, 'destroy'])->name('sewa.destroy');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/preferences', [PreferencesController::class, 'index'])->name('preferences');
+    Route::post('/preferences', [PreferencesController::class, 'store'])->name('preferences.store');
+});
+
+Route::post('/reset-visit', function () {
+    session()->flush();
+    session()->put('visit_count', 1);
+    session()->put('first_visit', now()->toDateTimeString());
+    session()->put('last_visit', now()->toDateTimeString());
+    return response()->json(['success' => true]);
+})->name('reset.visit');
+
 require __DIR__.'/auth.php';
+
+

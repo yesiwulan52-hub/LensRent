@@ -15,8 +15,12 @@ return Application::configure(basePath: dirname(__DIR__))
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'admin' => \App\Http\Middleware\CekAdmin::class,
         ]);
+
+        $middleware->append(\App\Http\Middleware\TrackVisitor::class);
     })
-    
+
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
+
+

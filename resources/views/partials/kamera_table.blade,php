@@ -1,0 +1,25 @@
+@forelse ($kameras as $k)
+    <tr>
+        <td>{{ $k->kode }}</td>
+        <td>{{ $k->nama }}</td>
+        <td>{{ $k->kategori }}</td>
+        <td class="{{ $k->jumlah < 3 ? 'stok-menipis' : '' }}">{{ $k->jumlah }}</td>
+        <td>Rp {{ number_format($k->harga, 0, ',', '.') }}</td>
+        <td>
+            @if($k->foto) <img src="{{ asset($k->foto) }}" width="50"> @else - @endif
+        </td>
+        @auth
+            @if(auth()->user()->role === 'admin')
+            <td>
+                <a href="{{ route('kamera.edit', $k->id) }}" class="btn-edit">Edit</a>
+                <form action="{{ route('kamera.destroy', $k->id) }}" method="POST" style="display:inline;">
+                    @csrf @method('DELETE')
+                    <button class="btn-hapus" onclick="return confirm('Yakin?')">Hapus</button>
+                </form>
+            </td>
+            @endif
+        @endauth
+    </tr>
+@empty
+    <tr><td colspan="7">Tidak ada kamera ditemukan</td></tr>
+@endforelse

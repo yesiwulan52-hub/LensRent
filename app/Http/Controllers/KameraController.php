@@ -75,4 +75,13 @@ class KameraController extends Controller
         $kamera->delete();
         return redirect()->route('kamera.index')->with('success', 'Kamera dihapus!');
     }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->input('q');
+        $kameras = Kamera::where('nama', 'like', "%{$keyword}%")
+                        ->orWhere('kode', 'like', "%{$keyword}%")
+                        ->paginate(10);
+        return view('partials.kamera_table', compact('kameras'))->render();
+    }
 }

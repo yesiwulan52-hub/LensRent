@@ -65,17 +65,41 @@
         </div>
 
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 Cari kode atau nama kamera...">
+            <input type="text" id="search-kamera" placeholder="🔍 Cari kode atau nama kamera...">
         </div>
 
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr><th>Kode</th><th>Nama</th><th>Kategori</th><th>Stok</th><th>Harga</th><th>Aksi</th></tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
+        <div id="kamera-table-container">
+            @include('partials.kamera_table', ['kameras' => $kameras])
         </div>
     </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-kamera');
+    if (!searchInput) return;
+
+    let debounceTimer;
+    searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            const keyword = this.value.trim();
+            const url = `{{ route('kamera.search') }}?q=${encodeURIComponent(keyword)}`;
+
+            fetch(url, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('kamera-table-container').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Search error:', error);
+                document.getElementById('kamera-table-container').innerHTML = '<p class="text-center text-danger">Terjadi kesalahan saat mencari data.</p>';
+            });
+        }, 300); // delay 300ms setelah selesai mengetik
+    });
+});
+</script>
+@endpush

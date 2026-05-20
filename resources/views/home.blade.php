@@ -44,6 +44,37 @@
             <p>✅ Asuransi tersedia</p>
             <p>✅ Free delivery area Jakarta</p>
         </div>
+
+        <div class="widget">
+            <h3>🌤️ Cuaca Surabaya</h3>
+            <div id="weather-loading" class="text-center" style="padding: 15px 0;">
+                <div class="spinner"></div>
+                <p style="margin-top: 8px;">Memuat cuaca...</p>
+            </div>
+            <div id="weather-content" style="display: none;">
+                <p id="city-name" class="stat-label" style="font-size: 18px; font-weight: bold;"></p>
+                <p id="temperature" class="stat-value" style="font-size: 28px;"></p>
+                <p id="description" class="stat-label"></p>
+            </div>
+            <div id="weather-error" style="display: none; color: red; text-align: center;"></div>
+        </div>
+
+        <div class="widget">
+            <h3>📊 Statistik Kunjungan</h3>
+            <div class="stat-item">
+                <span class="stat-label">Total Kunjungan:</span>
+                <span class="stat-value">{{ session('visit_count', 0) }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Kunjungan Pertama:</span>
+                <span class="stat-value">{{ session('first_visit', '-') }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Kunjungan Terakhir:</span>
+                <span class="stat-value">{{ session('last_visit', '-') }}</span>
+            </div>
+            <button id="reset-visit-btn" class="btn-reset mt-2">Reset Hitungan</button>
+        </div>
     </aside>
 
     <div class="main-content">
