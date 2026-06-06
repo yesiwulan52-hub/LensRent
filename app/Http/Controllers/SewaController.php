@@ -31,10 +31,6 @@ class SewaController extends Controller
     // Menyimpan penyewaan (hanya customer)
     public function store(Request $request)
     {
-        // if (auth()->user()->role !== 'customer') {
-        //     abort(403);
-        // }
-
         $validated = $request->validate([
             'id_penyewaan'  => 'required|unique:sewas',
             'nama_penyewa'  => 'required|min:3',
@@ -58,7 +54,9 @@ class SewaController extends Controller
         }
 
         // Kurangi stok
-        $kamera->decrement('jumlah', $request->jumlah_unit);
+        // $kamera->decrement('jumlah', $request->jumlah_unit);
+        $kamera->jumlah-= $request->jumlah_unit;
+        $kamera->save(); // Ini akan memicu event saving
 
         $validated['total_harga'] = $total;
         $validated['user_id'] = auth()->id();
@@ -71,14 +69,21 @@ class SewaController extends Controller
     // Membatalkan penyewaan (hanya customer, dan hanya miliknya)
     public function destroy(Sewa $sewa)
     {
-        if (auth()->user()->role !== 'admin' || $sewa->user_id !== auth()->id()) {
-            abort(403, 'Tidak diizinkan.');
+        if (auth()->user()->role === 'admin') {
+            // Admin batalkan sewa
+            $sewa->kamera->jumlah += $sewa->jumlah_unit;
+            $sewa->kamera->save(); // event saving akan update status
+            $sewa->delete();
+            return redirect()->route('sewa.index')->with('success', 'Pesanan berhasil dibatalkan oleh admin.');
         }
 
-        // Kembalikan stok
-        $sewa->kamera->increment('jumlah', $sewa->jumlah_unit);
-        $sewa->delete();
+        if ($sewa->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak diizinkan membatalkan pesanan ini.');
+        }
 
-        return redirect()->route('sewa.index')->with('success', 'Penyewaan dibatalkan!');
+        $sewa->kamera->jumlah += $sewa->jumlah_unit;
+        $sewa->kamera->save(); // event saving
+        $sewa->delete();
+        return redirect()->route('sewa.index')->with('success', 'Penyewaan berhasil dibatalkan.');
     }
 }

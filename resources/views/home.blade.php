@@ -65,11 +65,11 @@
                 </div>
             </div>
             <div class="grid" id="kameraGrid">
-                @forelse ($kameras ?? [] as $k)
+                @forelse ($kameras as $k)
                 <div class="card" data-nama="{{ $k->nama }}" data-kategori="{{ $k->kategori }}">
-                    <img src="{{ $k->foto ? asset($k->foto) : 'https://placehold.co/400x300/1B3A6B/white?text=Kamera' }}" alt="{{ $k->nama }}">
+                    <img src="{{ $k->foto ? asset($k->foto) : 'https://placehold.co/400x300' }}" alt="{{ $k->nama }}">
                     <h4>{{ $k->nama }}</h4>
-                    <p>Rp {{ number_format($k->harga, 0, ',', '.') }}<span style="font-size:12px">/hari</span></p>
+                    <p>Rp {{ number_format($k->harga, 0, ',', '.') }}<span>/hari</span></p>
                     <small>{{ $k->kategori }} | Stok: {{ $k->jumlah }}</small>
                 </div>
                 @empty

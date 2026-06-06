@@ -3,7 +3,7 @@
 @section('content')
 <div class="container" style="margin-top: 85px;">
     <div class="section-header">
-        <h2>Daftar Kamera</h2>
+        <h2>📋 Daftar Kamera</h2>
         @auth
             @if(auth()->user()->role === 'admin')
                 <a href="{{ route('kamera.create') }}" class="btn-primary">+ Tambah Kamera</a>

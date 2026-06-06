@@ -53,7 +53,7 @@ const renderTabelKamera = (data = daftarKamera) => {
     if (!tbody) return;
 
     if (data.length === 0) {
-        tbody.innerHTML = `<td><td colspan="6" style="text-align:center">Tidak ada data kamera</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center">Tidak ada data kamera</td></tr>`;
         return;
     }
 
@@ -68,7 +68,7 @@ const renderTabelKamera = (data = daftarKamera) => {
                 <button class="btn-edit" data-index="${i}">✏️ Edit</button>
                 <button class="btn-hapus" data-index="${i}">🗑️ Hapus</button>
             </td>
-        </table>
+        </tr>
     `).join("");
     updateStatistik();
 };
@@ -83,7 +83,7 @@ const renderGridKamera = (data = daftarKamera) => {
     }
 
     gridContainer.innerHTML = data.map(k => `
-        <div class="card" data-nama="${k.nama}" data-kode="${k.kode}">
+        <div class="card" data-nama="${k.nama}" data-kategori="${k.kategori}">
             <img src="${k.foto || 'https://placehold.co/400x300/1B3A6B/white?text=Kamera'}"
                  alt="${k.nama}" loading="lazy"
                  onerror="this.src='https://placehold.co/400x300/1B3A6B/white?text=No+Image'">
@@ -331,6 +331,7 @@ const initFormSewa = () => {
             const pembayaran = document.getElementById("pembayaran").value;
             const catatan = document.getElementById("catatan")?.value || "";
 
+            // Validasi
             if (!id) return showNotification("ID Penyewaan wajib diisi!", "error");
             if (!nama) return showNotification("Nama penyewa wajib diisi!", "error");
             if (nama.length < 3) return showNotification("Nama minimal 3 karakter!", "error");
@@ -354,6 +355,7 @@ const initFormSewa = () => {
             const hari = hitungHari(tglSewa, tglKembali);
             const total = kamera.harga * jumlah * hari;
 
+            // Kurangi stok
             kamera.jumlah -= jumlah;
 
             const sewaBaru = {
@@ -408,7 +410,8 @@ const initPencarianHome = () => {
             const keyword = searchInput.value.toLowerCase();
             document.querySelectorAll(".card").forEach(card => {
                 const nama = card.getAttribute("data-nama") || "";
-                card.style.display = nama.toLowerCase().includes(keyword) ? "block" : "none";
+                // Gunakan '' (default) agar grid tetap fleksibel
+                card.style.display = nama.toLowerCase().includes(keyword) ? '' : 'none';
             });
         };
         searchInput.addEventListener("input", filterCard);
@@ -463,10 +466,14 @@ document.addEventListener("DOMContentLoaded", () => {
         renderGridKamera();
         updateStatistik();
     } else {
-        renderGridKamera();
-        renderTabelKamera();
+        // ========== PERBAIKAN UNTUK HALAMAN HOME ==========
+        // Hapus panggilan renderGridKamera() dan renderTabelKamera()
+        // agar grid kamera populer tidak ditimpa oleh localStorage.
+        // Grid sudah dirender oleh backend (Laravel) di home.blade.php.
+        // Cukup jalankan initPencarianHome() untuk live search,
+        // dan updateStatistik() jika diperlukan.
         initPencarianHome();
-        updateStatistik();
+        updateStatistik(); // opsional, untuk statistik dari localStorage
     }
 });
 
@@ -499,8 +506,7 @@ async function fetchWeather() {
 }
 document.addEventListener('DOMContentLoaded', fetchWeather);
 
-// ==================== DARK MODE & COOKIE HELPERS (SATU VERSI, TIDAK DUPLIKAT) ====================
-// Cookie helpers
+// ==================== DARK MODE & COOKIE HELPERS ====================
 function setCookie(name, value, days) {
     let expires = "";
     if (days) {
@@ -521,7 +527,6 @@ function getCookie(name) {
     return null;
 }
 
-// Dark mode functions (menggabungkan dengan setTheme dan toggle)
 function setTheme(theme) {
     if (theme === 'dark') {
         document.documentElement.classList.add('dark');

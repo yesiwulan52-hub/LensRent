@@ -8,16 +8,21 @@ use Illuminate\Support\Facades\Storage;
 
 class KameraController extends Controller
 {
+    // app/Http/Controllers/KameraController.php
+
     public function index(Request $request)
     {
         $query = Kamera::query();
-        if ($request->ajax() && $request->has('search')) {
+
+        // Jika ada fitur pencarian
+        if ($request->has('search') && $request->ajax()) {
             $search = $request->search;
             $query->where('nama', 'like', "%{$search}%")
                 ->orWhere('kode', 'like', "%{$search}%");
             $kameras = $query->paginate(10);
             return view('partials.kamera_table', compact('kameras'))->render();
         }
+
         $kameras = $query->latest()->paginate(10);
         return view('kamera.index', compact('kameras'));
     }

@@ -30,11 +30,14 @@
                             <a href="{{ route('kamera.edit', $k->id) }}" class="btn-edit">Edit</a>
                             <form action="{{ route('kamera.destroy', $k->id) }}" method="POST" style="display:inline;">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="btn-hapus">Hapus</button>
+                                <button type="submit" class="btn-hapus" onclick="return confirm('Yakin hapus?')">Hapus</button>
                             </form>
+                        @else
+                            <span class="text-muted">-</span>
                         @endif
+                    @else
+                        <span class="text-muted">Login untuk aksi</span>
                     @endauth
-                    <a href="{{ route('kamera.show', $k->id) }}" class="btn-detail">Detail</a>
                 </td>
             </tr>
             @empty
@@ -44,25 +47,3 @@
     </table>
 </div>
 {{ $kameras->links() }}
-
-<script>
-    document.querySelectorAll('.btn-toggle-status').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = this.dataset.id;
-            fetch(`/kamera/${id}/toggle-status`, {
-                method: 'PATCH',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    this.innerText = data.status === 'available' ? '✅ Tersedia' : '❌ Tidak Tersedia';
-                    this.dataset.status = data.status;
-                }
-            });
-        });
-    });
-</script>

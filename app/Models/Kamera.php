@@ -29,4 +29,11 @@ class Kamera extends Model
     {
         return $query->where('jumlah', '<', 3);
     }
+
+    protected static function booted()
+    {
+        static::saving(function ($kamera) {
+            $kamera->status = $kamera->jumlah > 0 ? 'available' : 'unavailable';
+        });
+    }
 }
