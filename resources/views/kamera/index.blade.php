@@ -1,11 +1,9 @@
 @extends('layouts.app')
-
 @section('title', 'Data Kamera')
-
 @section('content')
-<div class="container">
+<div class="container" style="margin-top: 85px;">
     <div class="section-header">
-        <h2>📋 Daftar Kamera</h2>
+        <h2>Daftar Kamera</h2>
         @auth
             @if(auth()->user()->role === 'admin')
                 <a href="{{ route('kamera.create') }}" class="btn-primary">+ Tambah Kamera</a>
@@ -13,54 +11,38 @@
         @endauth
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    <div class="table-container">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Kode</th><th>Nama</th><th>Kategori</th><th>Stok</th><th>Harga</th><th>Foto</th><th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($kameras as $k)   {{-- <-- LOOPING DENGAN VARIABEL $k --}}
-                <tr>
-                    <td>{{ $k->kode }}</td>
-                    <td>{{ $k->nama }}</td>
-                    <td>{{ $k->kategori }}</td>
-                    <td class="{{ $k->jumlah < 3 ? 'stok-menipis' : '' }}">{{ $k->jumlah }}</td>
-                    <td>Rp {{ number_format($k->harga, 0, ',', '.') }}</td>
-                    <td>
-                        @if($k->foto)
-                            <img src="{{ asset($k->foto) }}" width="50" height="50" style="object-fit:cover;">
-                        @else
-                            -
-                        @endif
-                    </td>
-                    <td>
-                        @auth
-                            @if(auth()->user()->role === 'admin')
-                                <a href="{{ route('kamera.edit', $k->id) }}" class="btn-edit">Edit</a>
-                                <form action="{{ route('kamera.destroy', $k->id) }}" method="POST" style="display:inline;">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="btn-hapus" onclick="return confirm('Yakin hapus?')">Hapus</button>
-                                </form>
-                            @else
-                                <span>-</span>
-                            @endif
-                        @else
-                            <span>Login untuk aksi</span>
-                        @endauth
-                    </td>
-                </tr>
-                @empty
-                    <tr><td colspan="7" class="text-center">Belum ada data kamera</td><td
-                @endforelse
-            </tbody>
-        </table>
+    <div class="search-box">
+        <input type="text" id="search-kamera" placeholder="🔍 Cari kode atau nama kamera...">
+        <div id="search-loading" style="display:none; text-align:center; padding:10px;">Memuat...</div>
     </div>
-    {{ $kameras->links() }}
+
+    <div id="kamera-table-container">
+        @include('partials.kamera_table', ['kameras' => $kameras])
+    </div>
+</div>
+
+<!-- Modal konfirmasi hapus -->
+<div id="deleteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
+    <div style="background:white; padding:20px; border-radius:8px; text-align:center;">
+        <p>Yakin ingin menghapus data ini?</p>
+        <button id="confirmDelete" class="btn-save">Ya, Hapus</button>
+        <button id="cancelDelete" class="btn-cancel">Batal</button>
+    </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    // Modal delete handler
+    let deleteForm = null;
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-hapus')) {
+            e.preventDefault();
+            deleteForm = e.target.closest('form');
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+    });
+    document.getElementById('confirmDelete').onclick = () => { if(deleteForm) deleteForm.submit(); };
+    document.getElementById('cancelDelete').onclick = () => { document.getElementById('deleteModal').style.display = 'none'; };
+</script>
+@endpush

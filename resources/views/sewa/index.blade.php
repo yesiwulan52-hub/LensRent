@@ -1,56 +1,40 @@
 @extends('layouts.app')
-
-@section('title', 'Penyewaan Saya')
-
+@section('title', 'Riwayat Penyewaan')
 @section('content')
-<div class="container" style="margin-top: 100px;">
+<div class="container" style="margin-top:85px;">
     <div class="riwayat-card">
         <div class="section-header">
-            <h2>📜 Penyewaan Saya</h2>
-            @auth
-                @if(auth()->user()->role === 'customer')
-                    <a href="{{ route('sewa.create') }}" class="btn-primary">+ Sewa Kamera Baru</a>
-                @endif
-            @endauth
+            <h2>{{ auth()->user()->role === 'admin' ? 'Semua Penyewaan' : 'Penyewaan Saya' }}</h2>
+            @if(auth()->user()->role === 'customer')
+                <a href="{{ route('sewa.create') }}" class="btn-primary">+ Sewa Kamera</a>
+            @endif
         </div>
-
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
         <div class="table-container">
             <table class="table">
                 <thead>
-                    <tr>
-                        <th>ID Sewa</th>
-                        <th>Kamera</th>
-                        <th>Jumlah</th>
-                        <th>Tanggal Sewa</th>
-                        <th>Tanggal Kembali</th>
-                        <th>Total</th>
-                        <th>Aksi</th>
-                    </tr>
+                    <tr><th>ID Sewa</th><th>Penyewa</th><th>Kamera</th><th>Jumlah</th><th>Tgl Sewa</th><th>Tgl Kembali</th><th>Total</th><th>Aksi</th></tr>
                 </thead>
                 <tbody>
-                    @forelse ($sewas as $sewa)
+                    @forelse ($sewas as $s)
                     <tr>
-                        <td>{{ $sewa->id_penyewaan }}</td>
-                        <td>{{ $sewa->kamera->nama ?? '-' }}</td>
-                        <td>{{ $sewa->jumlah_unit }}</td>
-                        <td>{{ \Carbon\Carbon::parse($sewa->tanggal_sewa)->format('d/m/Y') }}</td>
-                        <td>{{ \Carbon\Carbon::parse($sewa->tanggal_kembali)->format('d/m/Y') }}</td>
-                        <td>Rp {{ number_format($sewa->total_harga, 0, ',', '.') }}</td>
+                        <td>{{ $s->id_penyewaan }}</td>
+                        <td>{{ $s->nama_penyewa }}</td>
+                        <td>{{ $s->kamera->nama }}</td>
+                        <td>{{ $s->jumlah_unit }}</td>
+                        <td>{{ date('d/m/Y', strtotime($s->tanggal_sewa)) }}</td>
+                        <td>{{ date('d/m/Y', strtotime($s->tanggal_kembali)) }}</td>
+                        <td>Rp {{ number_format($s->total_harga, 0, ',', '.') }}</td>
                         <td>
-                            <form action="{{ route('sewa.destroy', $sewa->id) }}" method="POST" onsubmit="return confirm('Batalkan sewa?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn-hapus-sewa">Batal</button>
-                            </form>
+                            @if(auth()->user()->role === 'customer' || auth()->user()->role === 'admin')
+                                <form action="{{ route('sewa.destroy', $s->id) }}" method="POST" onsubmit="return confirm('Batalkan sewa?')">
+                                    @csrf @method('DELETE')
+                                    <button class="btn-hapus-sewa">Batal</button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                     @empty
-                        <tr class="empty-row">
-                            <td colspan="7" class="text-center">😞 Belum ada penyewaan. Klik tombol "Sewa Kamera Baru" untuk mulai menyewa.</td>
-                        </tr>
+                    <tr><td colspan="8">Belum ada penyewaan</td></tr>
                     @endforelse
                 </tbody>
             </table>

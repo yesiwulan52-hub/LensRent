@@ -10,7 +10,7 @@ class Kamera extends Model
     use HasFactory;
 
     protected $fillable = [
-        'kode', 'nama', 'kategori', 'jumlah', 'harga', 'foto'
+        'kode', 'nama', 'kategori', 'jumlah', 'harga', 'foto'. 'status'
     ];
 
     protected $casts = [

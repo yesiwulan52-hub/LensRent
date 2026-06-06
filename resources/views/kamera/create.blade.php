@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('title', 'Tambah Kamera')
 @section('content')
-<div class="container" style="margin-top: 100px;">
+<div class="container" style="margin-top:100px;">
     <div class="form-card">
         <h2>Tambah Kamera Baru</h2>
-        <form action="{{ route('kamera.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('kamera.store') }}" method="POST" enctype="multipart/form-data" id="formKamera">
             @csrf
             @include('kamera._form')
             <div class="form-actions">
@@ -15,3 +15,22 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+    document.getElementById('formKamera').addEventListener('submit', function(e) {
+        let kode = document.querySelector('[name="kode"]').value.trim();
+        let nama = document.querySelector('[name="nama"]').value.trim();
+        let jumlah = document.querySelector('[name="jumlah"]').value;
+        let harga = document.querySelector('[name="harga"]').value;
+        let errors = [];
+        if (kode === '') errors.push('Kode wajib diisi');
+        if (nama.length < 3) errors.push('Nama minimal 3 karakter');
+        if (jumlah <= 0) errors.push('Stok harus > 0');
+        if (harga < 1000) errors.push('Harga minimal Rp 1000');
+        if (errors.length) {
+            e.preventDefault();
+            alert(errors.join('\n'));
+        }
+    });
+</script>
+@endpush

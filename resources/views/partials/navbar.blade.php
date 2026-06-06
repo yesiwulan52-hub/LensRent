@@ -6,16 +6,19 @@
         <span class="logo-text">LensRent</span>
     </div>
     <div class="menu" id="menu">
-        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
+        <a href="{{ route('home') }}">Home</a>
 
         @auth
-            <a href="{{ route('kamera.index') }}" class="{{ request()->routeIs('kamera.*') ? 'active' : '' }}">Data Kamera</a>
-
             @if(auth()->user()->role === 'admin')
+                <a href="{{ route('kamera.index') }}">Data Kamera</a>
                 <a href="{{ route('sewa.index') }}">Semua Penyewaan</a>
             @else
+                <a href="{{ route('kamera.index') }}">Data Kamera</a>
                 <a href="{{ route('sewa.index') }}">Penyewaan Saya</a>
             @endif
+
+            <!-- Dark mode toggle button -->
+            <button id="darkModeToggle" class="dark-mode-btn" aria-label="Toggle Dark mode">🌙</button>
 
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                 @csrf
@@ -24,9 +27,7 @@
         @else
             <a href="{{ route('login') }}">Login</a>
             <a href="{{ route('register') }}">Register</a>
-            <a href="{{ route('preferences') }}">Preferensi</a>
         @endauth
     </div>
     <button class="hamburger" id="hamburger">☰</button>
-
 </nav>

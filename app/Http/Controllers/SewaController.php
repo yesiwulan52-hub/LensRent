@@ -21,9 +21,9 @@ class SewaController extends Controller
 
     public function create()
     {
-        if (auth()->user()->role !== 'customer') {
-            abort(403, 'Hanya customer yang bisa menyewa kamera.');
-        }
+        // if (auth()->user()->role !== 'customer') {
+        //     abort(403, 'Hanya customer yang bisa menyewa kamera.');
+        // }
         $kameras = Kamera::where('jumlah', '>', 0)->get();
         return view('sewa.create', compact('kameras'));
     }
@@ -31,9 +31,9 @@ class SewaController extends Controller
     // Menyimpan penyewaan (hanya customer)
     public function store(Request $request)
     {
-        if (auth()->user()->role !== 'customer') {
-            abort(403);
-        }
+        // if (auth()->user()->role !== 'customer') {
+        //     abort(403);
+        // }
 
         $validated = $request->validate([
             'id_penyewaan'  => 'required|unique:sewas',
@@ -71,7 +71,7 @@ class SewaController extends Controller
     // Membatalkan penyewaan (hanya customer, dan hanya miliknya)
     public function destroy(Sewa $sewa)
     {
-        if (auth()->user()->role !== 'customer' || $sewa->user_id !== auth()->id()) {
+        if (auth()->user()->role !== 'admin' || $sewa->user_id !== auth()->id()) {
             abort(403, 'Tidak diizinkan.');
         }
 

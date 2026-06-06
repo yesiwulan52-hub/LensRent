@@ -8,10 +8,23 @@ use Illuminate\Support\Facades\Storage;
 
 class KameraController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kameras = Kamera::latest()->paginate(10);
+        $query = Kamera::query();
+        if ($request->ajax() && $request->has('search')) {
+            $search = $request->search;
+            $query->where('nama', 'like', "%{$search}%")
+                ->orWhere('kode', 'like', "%{$search}%");
+            $kameras = $query->paginate(10);
+            return view('partials.kamera_table', compact('kameras'))->render();
+        }
+        $kameras = $query->latest()->paginate(10);
         return view('kamera.index', compact('kameras'));
+    }
+
+    public function show(Kamera $kamera)
+    {
+        return view('kamera.show', compact('kamera'));
     }
 
     public function create()
@@ -29,12 +42,11 @@ class KameraController extends Controller
             'harga' => 'required|integer|min:1000',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-
         if ($request->hasFile('foto')) {
             $path = $request->file('foto')->store('kamera_fotos', 'public');
             $validated['foto'] = '/storage/' . $path;
         }
-
+        $validated['status'] = 'available';
         Kamera::create($validated);
         return redirect()->route('kamera.index')->with('success', 'Kamera ditambahkan!');
     }
@@ -54,7 +66,6 @@ class KameraController extends Controller
             'harga' => 'required|integer|min:1000',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-
         if ($request->hasFile('foto')) {
             if ($kamera->foto && Storage::disk('public')->exists(str_replace('/storage/', '', $kamera->foto))) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $kamera->foto));
@@ -62,7 +73,6 @@ class KameraController extends Controller
             $path = $request->file('foto')->store('kamera_fotos', 'public');
             $validated['foto'] = '/storage/' . $path;
         }
-
         $kamera->update($validated);
         return redirect()->route('kamera.index')->with('success', 'Kamera diupdate!');
     }
@@ -76,12 +86,11 @@ class KameraController extends Controller
         return redirect()->route('kamera.index')->with('success', 'Kamera dihapus!');
     }
 
-    public function search(Request $request)
+    // AJAX toggle status
+    public function toggleStatus(Kamera $kamera)
     {
-        $keyword = $request->input('q');
-        $kameras = Kamera::where('nama', 'like', "%{$keyword}%")
-                        ->orWhere('kode', 'like', "%{$keyword}%")
-                        ->paginate(10);
-        return view('partials.kamera_table', compact('kameras'))->render();
+        $kamera->status = $kamera->status === 'available' ? 'unavailable' : 'available';
+        $kamera->save();
+        return response()->json(['success' => true, 'status' => $kamera->status]);
     }
 }

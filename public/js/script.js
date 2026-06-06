@@ -1,3 +1,4 @@
+// ==================== DATA AWAL (localStorage) ====================
 const dataKameraAwal = [
     { kode: "K001", nama: "Fujifilm X100F", kategori: "Mirrorless", jumlah: 5, harga: 150000, foto: "/image/FujifilmX100F.jpg" },
     { kode: "K002", nama: "Sony A7 III", kategori: "Mirrorless", jumlah: 3, harga: 250000, foto: "/image/Sony_a7_III.jpg" },
@@ -52,7 +53,7 @@ const renderTabelKamera = (data = daftarKamera) => {
     if (!tbody) return;
 
     if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center">Tidak ada data kamera</td></tr>`;
+        tbody.innerHTML = `<td><td colspan="6" style="text-align:center">Tidak ada data kamera</td></tr>`;
         return;
     }
 
@@ -67,7 +68,7 @@ const renderTabelKamera = (data = daftarKamera) => {
                 <button class="btn-edit" data-index="${i}">✏️ Edit</button>
                 <button class="btn-hapus" data-index="${i}">🗑️ Hapus</button>
             </td>
-        </tr>
+        </table>
     `).join("");
     updateStatistik();
 };
@@ -261,8 +262,12 @@ const renderRiwayatSewa = () => {
                 <tbody>
                     ${daftarSewa.map((s, i) => `
                         <tr>
-                            <td>${s.id}</td><td>${s.nama}</td><td>${s.kamera}</td>
-                            <td>${s.jumlah}</td><td>${s.tanggalSewa}</td><td>${s.tanggalKembali}</td>
+                            <td>${s.id}</td>
+                            <td>${s.nama}</td>
+                            <td>${s.kamera}</td>
+                            <td>${s.jumlah}</td>
+                            <td>${s.tanggalSewa}</td>
+                            <td>${s.tanggalKembali}</td>
                             <td>${formatRupiah(s.total)}</td>
                             <td><button class="btn-hapus-sewa" data-index="${i}">Hapus</button></td>
                         </tr>
@@ -326,7 +331,6 @@ const initFormSewa = () => {
             const pembayaran = document.getElementById("pembayaran").value;
             const catatan = document.getElementById("catatan")?.value || "";
 
-            // Validasi
             if (!id) return showNotification("ID Penyewaan wajib diisi!", "error");
             if (!nama) return showNotification("Nama penyewa wajib diisi!", "error");
             if (nama.length < 3) return showNotification("Nama minimal 3 karakter!", "error");
@@ -350,7 +354,6 @@ const initFormSewa = () => {
             const hari = hitungHari(tglSewa, tglKembali);
             const total = kamera.harga * jumlah * hari;
 
-            // Kurangi stok
             kamera.jumlah -= jumlah;
 
             const sewaBaru = {
@@ -467,6 +470,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// ==================== FETCH CUACA (wttr.in) ====================
 async function fetchWeather() {
     const loadingDiv = document.getElementById('weather-loading');
     const contentDiv = document.getElementById('weather-content');
@@ -493,15 +497,15 @@ async function fetchWeather() {
         loadingDiv.style.display = 'none';
     }
 }
-
 document.addEventListener('DOMContentLoaded', fetchWeather);
 
+// ==================== DARK MODE & COOKIE HELPERS (SATU VERSI, TIDAK DUPLIKAT) ====================
 // Cookie helpers
 function setCookie(name, value, days) {
     let expires = "";
     if (days) {
         const date = new Date();
-        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = "; expires=" + date.toUTCString();
     }
     document.cookie = name + "=" + (value || "") + expires + "; path=/";
@@ -516,49 +520,42 @@ function getCookie(name) {
     }
     return null;
 }
-function deleteCookie(name) {
-    document.cookie = name + "=; Max-Age=-99999999; path=/";
-}
 
-// Dark mode toggle
-function applyDarkMode(isDark) {
-    if (isDark) {
+// Dark mode functions (menggabungkan dengan setTheme dan toggle)
+function setTheme(theme) {
+    if (theme === 'dark') {
         document.documentElement.classList.add('dark');
         setCookie('theme', 'dark', 30);
+        const toggleBtn = document.getElementById('darkModeToggle');
+        if (toggleBtn) toggleBtn.textContent = '☀️';
     } else {
         document.documentElement.classList.remove('dark');
         setCookie('theme', 'light', 30);
+        const toggleBtn = document.getElementById('darkModeToggle');
+        if (toggleBtn) toggleBtn.textContent = '🌙';
     }
 }
-// Inisialisasi tema (prioritas cookie > system)
+function toggleDarkMode() {
+    const isDark = document.documentElement.classList.contains('dark');
+    setTheme(isDark ? 'light' : 'dark');
+}
+
+// Initial load (cookie > system preference)
 const savedTheme = getCookie('theme');
 if (savedTheme === 'dark') {
-    applyDarkMode(true);
+    setTheme('dark');
 } else if (savedTheme === 'light') {
-    applyDarkMode(false);
+    setTheme('light');
+} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    setTheme('dark');
 } else {
-    // Cek preferensi sistem
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    applyDarkMode(prefersDark);
+    setTheme('light');
 }
-// Event listener tombol toggle (nanti ditaruh di navbar)
-document.addEventListener('DOMContentLoaded', function() {
-    const toggleBtn = document.getElementById('dark-mode-toggle');
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            applyDarkMode(!isDark);
-        });
-    }
-});
 
-document.getElementById('reset-visit-btn')?.addEventListener('click', async function() {
-    if (confirm('Reset semua data kunjungan?')) {
-        const token = document.querySelector('meta[name="csrf-token"]').content;
-        const response = await fetch('{{ route("reset.visit") }}', {
-            method: 'POST',
-            headers: { 'X-CSRF-TOKEN': token }
-        });
-        if (response.ok) location.reload();
+// Event listener untuk tombol toggle (pastikan id="darkModeToggle" ada di navbar)
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('darkModeToggle');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', toggleDarkMode);
     }
 });
