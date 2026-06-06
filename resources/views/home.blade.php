@@ -18,7 +18,7 @@
     <aside class="sidebar">
         <div class="widget">
             <h3>📊 Statistik</h3>
-            <div class="stat-item"><span class="stat-label">Total Kamera:</span><span class="stat-value">{{ \App\Models\Kamera::sum('jumlah') }}</span></div>
+             <div class="stat-item"><span class="stat-label">Total Kamera:</span><span class="stat-value">{{ \App\Models\Kamera::sum('jumlah') }}</span></div>
             <div class="stat-item"><span class="stat-label">Tersedia:</span><span class="stat-value">{{ max(\App\Models\Kamera::sum('jumlah') - \App\Models\Sewa::sum('jumlah_unit'), 0) }}</span></div>
             <div class="stat-item"><span class="stat-label">Disewa:</span><span class="stat-value">{{ \App\Models\Sewa::sum('jumlah_unit') }}</span></div>
         </div>
@@ -33,14 +33,6 @@
             <h3>💰 Info Harga Sewa</h3>
             <p>📷 Mirrorless: <strong>Rp150.000 - Rp250.000</strong></p>
             <p>🎥 DSLR: <strong>Rp180.000 - Rp200.000</strong></p>
-            <p>💳 DP 50% untuk sewa >3 hari</p>
-        </div>
-
-        <div class="widget">
-            <h3>💡 Tips Sewa</h3>
-            <p>✅ Minimal sewa 1 hari</p>
-            <p>✅ Asuransi tersedia</p>
-            <p>✅ Free delivery area Jakarta</p>
         </div>
     </aside>
 
@@ -65,15 +57,30 @@
                 </div>
             </div>
             <div class="grid" id="kameraGrid">
+                @php
+                    $visibleCount = 0;
+                @endphp
                 @forelse ($kameras as $k)
-                <div class="card" data-nama="{{ $k->nama }}" data-kategori="{{ $k->kategori }}">
-                    <img src="{{ $k->foto ? asset($k->foto) : 'https://placehold.co/400x300' }}" alt="{{ $k->nama }}">
-                    <h4>{{ $k->nama }}</h4>
-                    <p>Rp {{ number_format($k->harga, 0, ',', '.') }}<span>/hari</span></p>
-                    <small>{{ $k->kategori }} | Stok: {{ $k->jumlah }}</small>
-                </div>
+                    @php
+                        $hasImage = !empty($k->foto);
+                        $shouldShow = false;
+                        if ($hasImage && $visibleCount < 4) {
+                            $shouldShow = true;
+                            $visibleCount++;
+                        }
+                    @endphp
+                    <div class="card" 
+                         data-nama="{{ $k->nama }}" 
+                         data-kategori="{{ $k->kategori }}"
+                         data-has-image="{{ $hasImage ? 'true' : 'false' }}"
+                         style="display: {{ $shouldShow ? '' : 'none' }};">
+                        <img src="{{ $k->foto ? asset($k->foto) : 'https://placehold.co/400x300' }}" alt="{{ $k->nama }}">
+                        <h4>{{ $k->nama }}</h4>
+                        <p>Rp {{ number_format($k->harga, 0, ',', '.') }}<span>/hari</span></p>
+                        <small>{{ $k->kategori }} | Stok: {{ $k->jumlah }}</small>
+                    </div>
                 @empty
-                <p>Tidak ada kamera</p>
+                    <p>Tidak ada kamera</p>
                 @endforelse
             </div>
         </section>
@@ -89,29 +96,36 @@
     const filterCheckboxes = document.querySelectorAll('.filter-kategori');
 
     function filterCards() {
-        const keyword = searchInput ? searchInput.value.toLowerCase() : '';
-        const selectedCategories = Array.from(filterCheckboxes)
-            .filter(cb => cb.checked)
-            .map(cb => cb.value);
-        cards.forEach(card => {
-            const nama = card.getAttribute('data-nama').toLowerCase();
-            const kategori = card.getAttribute('data-kategori');
-            const matchName = nama.includes(keyword);
-            const matchCat = (selectedCategories.length === 0 || selectedCategories.includes(kategori));
-            card.style.display = (matchName && matchCat) ? 'block' : 'none';
-        });
-    }
+        const keyword = searchInput ? searchInput.value.trim().toLowerCase() : '';
+        const selectedCats = Array.from(filterCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+        
+        const isSearchingOrFiltering = keyword !== '' || selectedCats.length > 0;
 
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            const keyword = this.value.toLowerCase();
+        if (isSearchingOrFiltering) {
+            // Show any card that matches name & category
             cards.forEach(card => {
                 const nama = card.getAttribute('data-nama').toLowerCase();
-                card.style.display = nama.includes(keyword) ? 'block' : 'none';
+                const kategori = card.getAttribute('data-kategori');
+                const matchName = nama.includes(keyword);
+                const matchCat = (selectedCats.length === 0 || selectedCats.includes(kategori));
+                card.style.display = (matchName && matchCat) ? '' : 'none';
             });
-        });
+        } else {
+            // Revert to showing only first 4 cards with images
+            let visibleCount = 0;
+            cards.forEach(card => {
+                const hasImage = card.getAttribute('data-has-image') === 'true';
+                if (hasImage && visibleCount < 4) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
     }
 
-    // filterCheckboxes.forEach(cb => cb.addEventListener('change', applyCategoryFilter));
+    if (searchInput) searchInput.addEventListener('input', filterCards);
+    filterCheckboxes.forEach(cb => cb.addEventListener('change', filterCards));
 </script>
 @endpush

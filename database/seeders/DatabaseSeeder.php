@@ -12,6 +12,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UserSeeder::class);
         $this->call(KameraSeeder::class);
-        // SewaSeeder nanti setelah ada user_id
+        $this->call(SewaSeeder::class);
     }
 }

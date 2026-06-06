@@ -16,6 +16,6 @@ class DashboardController extends Controller
         $pendapatan = Sewa::sum('total_harga');
         $stokMenipis = Kamera::where('jumlah', '<', 3)->count();
 
-        return view('home', compact('totalKamera', 'totalTersedia', 'totalDisewa', 'pendapatan', 'stokMenipis'));
+        return view('home', compact('totalKamera', 'totalTersedia', 'totalDisewa'));
     }
 }

@@ -461,17 +461,9 @@ document.addEventListener("DOMContentLoaded", () => {
         renderTabelKamera();
         initCRUDKamera();
     } else if (path.includes("/sewa")) {
-        initFormSewa();
-        renderTabelKamera();
-        renderGridKamera();
+        // Hanya update statistik jika perlu, tidak perlu inisialisasi form
         updateStatistik();
     } else {
-        // ========== PERBAIKAN UNTUK HALAMAN HOME ==========
-        // Hapus panggilan renderGridKamera() dan renderTabelKamera()
-        // agar grid kamera populer tidak ditimpa oleh localStorage.
-        // Grid sudah dirender oleh backend (Laravel) di home.blade.php.
-        // Cukup jalankan initPencarianHome() untuk live search,
-        // dan updateStatistik() jika diperlukan.
         initPencarianHome();
         updateStatistik(); // opsional, untuk statistik dari localStorage
     }

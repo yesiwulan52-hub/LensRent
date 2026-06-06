@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Detail Kamera')
 @section('content')
-<div class="container" style="margin-top:100px;">
+<div class="container">
     <div class="form-card">
         <h2>{{ $kamera->nama }}</h2>
         <div class="row">

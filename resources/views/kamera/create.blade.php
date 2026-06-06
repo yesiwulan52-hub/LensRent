@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Tambah Kamera')
 @section('content')
-<div class="container" style="margin-top:100px;">
+<div class="container">
     <div class="form-card">
         <h2>Tambah Kamera Baru</h2>
         <form action="{{ route('kamera.store') }}" method="POST" enctype="multipart/form-data" id="formKamera">

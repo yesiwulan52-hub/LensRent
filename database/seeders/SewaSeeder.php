@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Sewa;
 use App\Models\Kamera;
+use App\Models\User;
 
 class SewaSeeder extends Seeder
 {
@@ -20,6 +21,9 @@ class SewaSeeder extends Seeder
             return;
         }
 
+        $customer = User::where('role', 'customer')->first() ?? User::first();
+        $customerId = $customer ? $customer->id : null;
+
         $sewas = [
             [
                 'id_penyewaan'   => 'SW001',
@@ -31,7 +35,8 @@ class SewaSeeder extends Seeder
                 'tanggal_kembali'=> '2025-05-03',   // 2 hari
                 'metode_pembayaran' => 'Transfer Bank',
                 'catatan'        => 'Ambil sendiri',
-                // total_harga akan dihitung nanti
+                'kamera_id'      => $kameraK001->id,
+                'jumlah_unit'    => 1,
             ],
             [
                 'id_penyewaan'   => 'SW002',
@@ -43,6 +48,8 @@ class SewaSeeder extends Seeder
                 'tanggal_kembali'=> '2025-05-05',   // 3 hari
                 'metode_pembayaran' => 'E-Wallet',
                 'catatan'        => 'Kirim ke alamat',
+                'kamera_id'      => $kameraK002->id,
+                'jumlah_unit'    => 2,
             ],
             [
                 'id_penyewaan'   => 'SW003',
@@ -54,6 +61,8 @@ class SewaSeeder extends Seeder
                 'tanggal_kembali'=> '2025-05-04',   // 1 hari
                 'metode_pembayaran' => 'Cash',
                 'catatan'        => null,
+                'kamera_id'      => $kameraK003->id,
+                'jumlah_unit'    => 1,
             ],
             [
                 'id_penyewaan'   => 'SW004',
@@ -65,6 +74,8 @@ class SewaSeeder extends Seeder
                 'tanggal_kembali'=> '2025-05-15',   // 5 hari
                 'metode_pembayaran' => 'Transfer Bank',
                 'catatan'        => 'Butuh charger ekstra',
+                'kamera_id'      => $kameraK004->id,
+                'jumlah_unit'    => 1,
             ],
             [
                 'id_penyewaan'   => 'SW005',
@@ -76,37 +87,31 @@ class SewaSeeder extends Seeder
                 'tanggal_kembali'=> '2025-05-14',   // 2 hari
                 'metode_pembayaran' => 'E-Wallet',
                 'catatan'        => 'Pengambilan setelah jam 10 pagi',
+                'kamera_id'      => $kameraK001->id,
+                'jumlah_unit'    => 1,
             ],
         ];
 
         $hitungHari = function ($tglSewa, $tglKembali) {
-            return (strtotime($tglKembali) - strtotime($tglSewa)) / (60 * 60 * 24) ;
+            return max(1, (strtotime($tglKembali) - strtotime($tglSewa)) / (60 * 60 * 24));
         };
 
         foreach ($sewas as $data) {
             $hari = $hitungHari($data['tanggal_sewa'], $data['tanggal_kembali']);
+            $kamera = Kamera::find($data['kamera_id']);
+            $total = $kamera->harga * $data['jumlah_unit'] * $hari;
 
-            $attachments = [];
-             switch ($data['id_penyewaan']) {
-                case 'SW001':
-                    $attachments[$kamera1->id] = ['jumlah_unit' => 1, 'harga_satuan' => $kamera1->harga];
-                    $attachments[$kamera2->id] = ['jumlah_unit' => 2, 'harga_satuan' => $kamera2->harga];
-                    break;
-                case 'SW002':
-                    $attachments[$kamera3->id] = ['jumlah_unit' => 1, 'harga_satuan' => $kamera3->harga];
-                    break;
-            }
+            $sewaData = array_merge($data, [
+                'total_harga' => $total,
+                'user_id' => $customerId,
+            ]);
 
-             $total = 0;
-            foreach ($attachments as $kId => $pivot) {
-                $total += $pivot['jumlah_unit'] * $pivot['harga_satuan'] * $hari;
-            }
+            $sewa = Sewa::create($sewaData);
 
-            $sewa = Sewa::create(array_merge($data, ['total_harga' => $total]));
-
-            foreach ($attachments as $kId => $pivot) {
-                $sewa->kameras()->attach($kameraId, $pivot);
-            }
+            $sewa->kameras()->attach($data['kamera_id'], [
+                'jumlah_unit' => $data['jumlah_unit'],
+                'harga_satuan' => $kamera->harga,
+            ]);
         }
 
         $this->command->info('SewaSeeder berhasil menambahkan data dummy penyewaan (many-to-many).');

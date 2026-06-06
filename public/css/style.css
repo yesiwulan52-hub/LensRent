@@ -9,6 +9,7 @@ body {
     background: #F5EFE6;
     color: #4A3728;
     line-height: 1.6;
+    padding-top: 70px;
 }
 
 h1 { font-size: clamp(28px, 6vw, 48px); font-weight: 800; }
@@ -20,11 +21,12 @@ nav {
     position: fixed;
     top: 0;
     width: 100%;
+    height: 70px;
     background: #3E2723;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 15px;
+    padding: 0 20px;
     z-index: 1000;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
@@ -34,8 +36,8 @@ nav {
     gap: 12px;
 }
 .logo-icon img {
-    width: 80px;
-    height: 80px;
+    height: 48px;
+    width: auto;
     object-fit: contain;
 }
 .logo-text {
@@ -72,7 +74,7 @@ nav {
 
 /* ==================== HERO ==================== */
 .hero {
-    margin-top: 55px;
+    margin-top: 0;
     min-height: 400px;
     background: linear-gradient(135deg, #3E2723 0%, #6B4C3A 50%, #A0522D 100%);
     display: flex;
@@ -98,7 +100,7 @@ nav {
     to { opacity: 1; transform: translateY(0); }
 }
 .hero-small {
-    margin-top: 55px;
+    margin-top: 0;
     background: linear-gradient(135deg, #3E2723, #6B4C3A);
     padding: 60px 20px;
     text-align: center;
@@ -126,13 +128,14 @@ nav {
     border-radius: 16px;
     padding: 24px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    position: sticky;
-    top: 75px;
+    position: static;
 }
 @media (min-width: 992px) {
     .sidebar {
         width: 300px;
         flex-shrink: 0;
+        position: sticky;
+        top: 85px;
     }
 }
 .main-content {
@@ -761,7 +764,7 @@ footer {
     .menu {
         display: none;
         position: absolute;
-        top: 55px;
+        top: 70px;
         left: 0;
         right: 0;
         background: #3E2723;
@@ -871,4 +874,73 @@ footer {
 }
 ::-webkit-scrollbar-thumb:hover {
     background: #A0522D;
+}
+
+/* ==================== GRID & DETAILS ==================== */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.col-md-5, .col-md-7 {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+@media (min-width: 768px) {
+    .col-md-5 {
+        flex: 0 0 41.666667%;
+        max-width: 41.666667%;
+    }
+    .col-md-7 {
+        flex: 0 0 58.333333%;
+        max-width: 58.333333%;
+    }
+}
+
+/* ==================== STATUS BADGES ==================== */
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+}
+.status-available {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.status-unavailable {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.btn-toggle-status {
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+.btn-toggle-status.status-available {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.btn-toggle-status.status-unavailable {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.btn-toggle-status.status-available:hover {
+    background-color: #c3e6cb;
+}
+.btn-toggle-status.status-unavailable:hover {
+    background-color: #f5c6cb;
 }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Riwayat Penyewaan')
 @section('content')
-<div class="container" style="margin-top:85px;">
+<div class="container">
     <div class="riwayat-card">
         <div class="section-header">
             <h2>{{ auth()->user()->role === 'admin' ? 'Semua Penyewaan' : 'Penyewaan Saya' }}</h2>

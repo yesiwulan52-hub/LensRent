@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Edit Kamera')
 @section('content')
-<div class="container" style="margin-top: 100px;">
+<div class="container">
     <div class="form-card">
         <h2>Edit Kamera</h2>
         <form action="{{ route('kamera.update', $kamera->id) }}" method="POST" enctype="multipart/form-data" id="formEditKamera">

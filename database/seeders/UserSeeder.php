@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
 
         $jumlahCustomer = (int) env('SEEDER_CUSTOMER_COUNT', 50);
 
-        $faker = Faker::create('id_ID');
+        $faker = \Faker\Factory::create('id_ID');
         for ($i = 0; $i < $jumlahCustomer; $i++) {
             User::firstOrCreate(
                 ['email' => $faker->unique()->safeEmail],

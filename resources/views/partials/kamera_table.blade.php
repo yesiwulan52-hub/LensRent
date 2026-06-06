@@ -20,9 +20,21 @@
                 <td class="{{ $k->jumlah < 3 ? 'stok-menipis' : '' }}">{{ $k->jumlah }}</td>
                 <td>Rp {{ number_format($k->harga, 0, ',', '.') }}</td>
                 <td>
-                    <button class="btn-toggle-status" data-id="{{ $k->id }}" data-status="{{ $k->status }}">
-                        {{ $k->status === 'available' ? '✅ Tersedia' : '❌ Tidak Tersedia' }}
-                    </button>
+                    @auth
+                        @if(auth()->user()->role === 'admin')
+                            <button class="btn-toggle-status {{ $k->status === 'available' ? 'status-available' : 'status-unavailable' }}" data-id="{{ $k->id }}" data-status="{{ $k->status }}">
+                                {{ $k->status === 'available' ? '✅ Tersedia' : '❌ Tidak Tersedia' }}
+                            </button>
+                        @else
+                            <span class="status-badge {{ $k->status === 'available' ? 'status-available' : 'status-unavailable' }}">
+                                {{ $k->status === 'available' ? 'Tersedia' : 'Tidak Tersedia' }}
+                            </span>
+                        @endif
+                    @else
+                        <span class="status-badge {{ $k->status === 'available' ? 'status-available' : 'status-unavailable' }}">
+                            {{ $k->status === 'available' ? 'Tersedia' : 'Tidak Tersedia' }}
+                        </span>
+                    @endauth
                 </td>
                 <td>
                     @auth

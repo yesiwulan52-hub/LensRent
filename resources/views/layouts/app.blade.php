@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'LensRent')</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Prevent FOUC for dark mode -->
@@ -31,6 +32,7 @@
             <div class="alert alert-error">{{ session('error') }}</div>
         @endif
         @yield('content')
+        {{ $slot ?? '' }}
     </main>
     
     @include('partials.footer')

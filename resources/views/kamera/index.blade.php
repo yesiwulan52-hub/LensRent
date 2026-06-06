@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Data Kamera')
 @section('content')
-<div class="container" style="margin-top: 85px;">
+<div class="container">
     <div class="section-header">
         <h2>📋 Daftar Kamera</h2>
         @auth
@@ -44,5 +44,83 @@
     });
     document.getElementById('confirmDelete').onclick = () => { if(deleteForm) deleteForm.submit(); };
     document.getElementById('cancelDelete').onclick = () => { document.getElementById('deleteModal').style.display = 'none'; };
+
+    // AJAX Search
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-kamera');
+        if (!searchInput) return;
+
+        let debounceTimer;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            const loading = document.getElementById('search-loading');
+            if (loading) loading.style.display = 'block';
+
+            debounceTimer = setTimeout(() => {
+                const keyword = searchInput.value.trim();
+                const url = `{{ route('kamera.index') }}?search=${encodeURIComponent(keyword)}`;
+
+                fetch(url, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('kamera-table-container').innerHTML = html;
+                    if (loading) loading.style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                    document.getElementById('kamera-table-container').innerHTML = '<p class="text-center text-danger">Terjadi kesalahan saat mencari data.</p>';
+                    if (loading) loading.style.display = 'none';
+                });
+            }, 300);
+        });
+    });
+
+    // AJAX Status Toggle (Admin Only)
+    document.addEventListener('click', function(e) {
+        const button = e.target.closest('.btn-toggle-status');
+        if (button) {
+            e.preventDefault();
+            const id = button.getAttribute('data-id');
+            const url = `/kamera/${id}/toggle-status`;
+
+            button.disabled = true;
+            fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                button.disabled = false;
+                if (data.success) {
+                    button.setAttribute('data-status', data.status);
+                    if (data.status === 'available') {
+                        button.innerHTML = '✅ Tersedia';
+                        button.classList.remove('status-unavailable');
+                        button.classList.add('status-available');
+                    } else {
+                        button.innerHTML = '❌ Tidak Tersedia';
+                        button.classList.remove('status-available');
+                        button.classList.add('status-unavailable');
+                    }
+                    if (typeof showNotification === 'function') {
+                        showNotification('Status kamera berhasil diubah!', 'success');
+                    }
+                } else {
+                    alert('Gagal mengubah status.');
+                }
+            })
+            .catch(error => {
+                button.disabled = false;
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengubah status.');
+            });
+        }
+    });
 </script>
 @endpush

@@ -15,18 +15,23 @@ Route::get('/dashboard', function () {
 // Route untuk melihat daftar kamera (wajib login, tapi bisa dilakukan oleh semua role)
 Route::middleware(['auth'])->group(function () {
     Route::get('/kamera', [KameraController::class, 'index'])->name('kamera.index');
-    Route::get('/kamera/{kamera}', [KameraController::class, 'show'])->name('kamera.show');
 });
 
 // Route untuk mengelola data kamera (HANYA untuk admin)
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/kamera/create', [KameraController::class, 'create'])->name('kamera.create');
     Route::post('/kamera', [KameraController::class, 'store'])->name('kamera.store');
+    Route::get('/kamera/search', [KameraController::class, 'search'])->name('kamera.search');
     Route::get('/kamera/{kamera}/edit', [KameraController::class, 'edit'])->name('kamera.edit');
     Route::put('/kamera/{kamera}', [KameraController::class, 'update'])->name('kamera.update');
     Route::delete('/kamera/{kamera}', [KameraController::class, 'destroy'])->name('kamera.destroy');
     // (Opsional) Route AJAX untuk toggle status kamera
     Route::patch('/kamera/{kamera}/toggle-status', [KameraController::class, 'toggleStatus'])->name('kamera.toggle');
+});
+
+// Wildcard route untuk melihat detail kamera (wajib login, setelah route spesifik dideklarasikan)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/kamera/{kamera}', [KameraController::class, 'show'])->name('kamera.show');
 });
 
 // Route untuk penyewaan (bisa dilakukan oleh pembeli/customer)

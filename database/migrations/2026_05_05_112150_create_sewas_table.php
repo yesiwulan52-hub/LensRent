@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('metode_pembayaran');
             $table->text('catatan')->nullable();
             $table->bigInteger('total_harga');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

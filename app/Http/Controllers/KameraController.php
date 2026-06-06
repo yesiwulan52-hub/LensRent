@@ -56,6 +56,15 @@ class KameraController extends Controller
         return redirect()->route('kamera.index')->with('success', 'Kamera ditambahkan!');
     }
 
+    public function search(Request $request)
+    {
+        $keyword = $request->q;
+        $kameras = Kamera::where('nama', 'like', "%{$keyword}%")
+                        ->orWhere('kode', 'like', "%{$keyword}%")
+                        ->paginate(10);
+        return view('partials.kamera_table', compact('kameras'))->render();
+    }
+
     public function edit(Kamera $kamera)
     {
         return view('kamera.edit', compact('kamera'));
