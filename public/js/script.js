@@ -453,50 +453,38 @@ document.addEventListener("DOMContentLoaded", () => {
     initHamburger();
     initResetData();
 
-    document.querySelectorAll(".filter-kategori").forEach(cb => cb.addEventListener("change", filterKamera));
-    const searchInput = document.getElementById("searchInput");
-    if (searchInput) searchInput.addEventListener("input", filterKamera);
-
-    if (path.includes("/kamera")) {
+    // Halaman Data Kamera (index)
+    if (path === '/kamera') {
         renderTabelKamera();
         initCRUDKamera();
-    } else if (path.includes("/sewa")) {
-        // Hanya update statistik jika perlu, tidak perlu inisialisasi form
-        updateStatistik();
-    } else {
-        initPencarianHome();
-        updateStatistik(); // opsional, untuk statistik dari localStorage
     }
+    // Halaman Sewa
+    else if (path.includes('/sewa')) {
+        // Periksa apakah halaman sewa create atau index
+        if (path.includes('/sewa/create')) {
+            // Tidak perlu initFormSewa() jika form sudah pakai backend
+        } else {
+            initFormSewa();
+            renderTabelKamera();
+            renderGridKamera();
+            updateStatistik();
+        }
+    }
+    // Halaman Home
+    else {
+        initPencarianHome();
+        updateStatistik();
+    }
+
+    // Filter kategori & search di halaman yang memiliki elemen tersebut
+    const filterCheckboxes = document.querySelectorAll(".filter-kategori");
+    if (filterCheckboxes.length) {
+        filterCheckboxes.forEach(cb => cb.addEventListener("change", filterKamera));
+    }
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) searchInput.addEventListener("input", filterKamera);
 });
 
-// ==================== FETCH CUACA (wttr.in) ====================
-async function fetchWeather() {
-    const loadingDiv = document.getElementById('weather-loading');
-    const contentDiv = document.getElementById('weather-content');
-    const errorDiv = document.getElementById('weather-error');
-    if (!loadingDiv) return;
-
-    loadingDiv.style.display = 'block';
-    contentDiv.style.display = 'none';
-    errorDiv.style.display = 'none';
-
-    try {
-        const response = await fetch('https://wttr.in/Surabaya?format=j1');
-        if (!response.ok) throw new Error();
-        const data = await response.json();
-        const current = data.current_condition[0];
-        document.getElementById('city-name').innerText = 'Surabaya';
-        document.getElementById('temperature').innerHTML = `${current.temp_C}°C`;
-        document.getElementById('description').innerText = current.weatherDesc[0].value;
-        contentDiv.style.display = 'block';
-    } catch (error) {
-        errorDiv.innerText = 'Gagal memuat data cuaca.';
-        errorDiv.style.display = 'block';
-    } finally {
-        loadingDiv.style.display = 'none';
-    }
-}
-document.addEventListener('DOMContentLoaded', fetchWeather);
 
 // ==================== DARK MODE & COOKIE HELPERS ====================
 function setCookie(name, value, days) {

@@ -23,7 +23,7 @@ class KameraController extends Controller
             return view('partials.kamera_table', compact('kameras'))->render();
         }
 
-        $kameras = $query->latest()->paginate(10);
+        $kameras = $query->orderBy('kode', 'asc')->paginate(10);
         return view('kamera.index', compact('kameras'));
     }
 
