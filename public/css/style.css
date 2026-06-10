@@ -944,3 +944,224 @@ footer {
 .btn-toggle-status.status-unavailable:hover {
     background-color: #f5c6cb;
 }
+
+/* ==================== NAVBAR USER DROPDOWN ==================== */
+.nav-user-dropdown {
+    position: relative;
+    display: inline-block;
+}
+.nav-user-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 30px;
+    padding: 6px 14px 6px 6px;
+    cursor: pointer;
+    color: #D2B48C;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+.nav-user-btn:hover,
+.nav-user-btn.active {
+    background: #6B4C3A;
+    border-color: #A0522D;
+    color: white;
+}
+.nav-user-avatar {
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, #A0522D, #CD853F);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+}
+.nav-user-name {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.nav-chevron {
+    font-size: 12px;
+    transition: transform 0.3s;
+}
+.nav-user-btn.active .nav-chevron {
+    transform: rotate(180deg);
+}
+.nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    min-width: 190px;
+    overflow: hidden;
+    z-index: 9999;
+    animation: dropdownIn 0.2s ease;
+}
+.nav-dropdown-menu.show {
+    display: block;
+}
+@keyframes dropdownIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.nav-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 18px;
+    text-decoration: none;
+    color: #4A3728;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'Inter', Arial, sans-serif;
+}
+.nav-dropdown-item:hover {
+    background: #F5EFE6;
+    color: #A0522D;
+}
+.nav-dropdown-logout {
+    color: #c0392b;
+}
+.nav-dropdown-logout:hover {
+    background: #fff5f5;
+    color: #c0392b;
+}
+.nav-dropdown-divider {
+    height: 1px;
+    background: #EDE0D4;
+    margin: 4px 0;
+}
+.dark .nav-dropdown-menu {
+    background: #2d2d44;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+.dark .nav-dropdown-item {
+    color: #e0e0e0;
+}
+.dark .nav-dropdown-item:hover {
+    background: #3d3d5c;
+}
+.dark .nav-dropdown-divider {
+    background: #444;
+}
+
+/* ==================== FOTO KAMERA UPLOAD & PREVIEW ==================== */
+.foto-upload-area {
+    border: 2px dashed #EDE0D4;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s;
+    background: #FDFAF7;
+    margin-top: 10px;
+}
+.foto-upload-area.dragover {
+    border-color: #A0522D;
+    background: #FDF5ED;
+}
+.foto-upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    gap: 8px;
+}
+.foto-upload-placeholder:hover {
+    background: #F5EFE6;
+}
+.foto-upload-placeholder p {
+    color: #6B4C3A;
+    font-weight: 600;
+    margin: 0;
+}
+.foto-upload-placeholder small {
+    color: #8B6248;
+}
+.foto-preview-current {
+    padding: 14px;
+    background: #F5EFE6;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #EDE0D4;
+}
+.foto-preview-img {
+    width: 100%;
+    max-height: 220px;
+    object-fit: contain;
+    border-radius: 8px;
+    display: block;
+}
+#fotoPreviewNew {
+    padding: 14px;
+    text-align: center;
+}
+.foto-remove-btn {
+    margin-top: 10px;
+    background: #f8d7da;
+    color: #721c24;
+    border: none;
+    padding: 6px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: 0.2s;
+}
+.foto-remove-btn:hover {
+    background: #f5c6cb;
+}
+
+/* ==================== FOTO THUMBNAIL DI TABEL ==================== */
+.kamera-thumb {
+    width: 60px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid #EDE0D4;
+    display: block;
+}
+.kamera-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-color: #A0522D;
+}
+.kamera-thumb-placeholder {
+    width: 60px;
+    height: 48px;
+    border-radius: 8px;
+    background: #F5EFE6;
+    border: 2px dashed #EDE0D4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #8B6248;
+}
+
+/* ==================== STOK MENIPIS ==================== */
+.stok-menipis {
+    color: #D2691E;
+    font-weight: 700;
+}

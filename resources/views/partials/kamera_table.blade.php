@@ -2,6 +2,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Foto</th>
                 <th>Kode</th>
                 <th>Nama</th>
                 <th>Kategori</th>
@@ -14,6 +15,13 @@
         <tbody>
             @forelse ($kameras as $k)
             <tr>
+                <td>
+                    @if($k->foto)
+                        <img src="{{ asset($k->foto) }}" alt="{{ $k->nama }}" class="kamera-thumb" onclick="showFotoModal('{{ asset($k->foto) }}', '{{ $k->nama }}')">
+                    @else
+                        <div class="kamera-thumb-placeholder">📷</div>
+                    @endif
+                </td>
                 <td>{{ $k->kode }}</td>
                 <td><a href="{{ route('kamera.show', $k->id) }}">{{ $k->nama }}</a></td>
                 <td>{{ $k->kategori }}</td>
@@ -53,9 +61,28 @@
                 </td>
             </tr>
             @empty
-            <tr><td colspan="7">Belum ada kamera</td></tr>
+            <tr><td colspan="8">Belum ada kamera</td></tr>
             @endforelse
         </tbody>
     </table>
 </div>
 {{ $kameras->links() }}
+
+<!-- Modal Preview Foto -->
+<div id="fotoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;" onclick="closeFotoModal()">
+    <div style="position:relative; max-width:600px; width:90%; text-align:center;" onclick="event.stopPropagation()">
+        <img id="fotoModalImg" src="" alt="" style="width:100%; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+        <p id="fotoModalNama" style="color:white; margin-top:12px; font-weight:600; font-size:18px;"></p>
+        <button onclick="closeFotoModal()" style="position:absolute; top:-15px; right:-15px; background:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:20px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.3);">✕</button>
+    </div>
+</div>
+<script>
+function showFotoModal(src, nama) {
+    document.getElementById('fotoModalImg').src = src;
+    document.getElementById('fotoModalNama').textContent = nama;
+    document.getElementById('fotoModal').style.display = 'flex';
+}
+function closeFotoModal() {
+    document.getElementById('fotoModal').style.display = 'none';
+}
+</script>

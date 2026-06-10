@@ -8,11 +8,11 @@
         <h3>🔗 Navigasi</h3>
         <a href="{{ route('home') }}">Home</a>
         <a href="{{ route('kamera.index') }}">Data Kamera</a>
-        {{-- <a href="{{ route('sewa.form') }}">Penyewaan</a> --}}
+        <a href="{{ route('sewa.index') }}">Penyewaan</a>
     </div>
     <div class="footer-section">
         <h3>📞 Kontak Kami</h3>
-        <p>📍 Jl. Fotografi No. 123, Jakarta</p>
+        <p>📍 Jl. KH. Ahmad Dahlan No. 123, Jember</p>
         <p>📞 (021) 1234-5678</p>
         <p>✉️ info@lensrent.com</p>
     </div>
